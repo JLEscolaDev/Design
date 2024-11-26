@@ -6,25 +6,20 @@
 //
 import SwiftUI
 
-enum DragState {
+public enum DragState {
     case inactive
-    case dragging(translation: CGSize)
+    case dragging/*(translation: CGSize)*/
     
-    var translation: CGSize {
-        switch self {
-        case .inactive:
-            return .zero
-        case .dragging(let translation):
-            return translation
-        }
-    }
+//    var translation: CGSize {
+//        switch self {
+//        case .inactive:
+//            return .zero
+//        case .dragging(let translation):
+//            return translation
+//        }
+//    }
     
     var isDragging: Bool {
-        switch self {
-        case .inactive:
-            return false
-        case .dragging:
-            return true
-        }
+        self == .dragging ? true : false
     }
 }

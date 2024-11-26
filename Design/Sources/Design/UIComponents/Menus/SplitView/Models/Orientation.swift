@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum Orientation {
+public enum Orientation {
     case vertical
     case horizontal
 }
