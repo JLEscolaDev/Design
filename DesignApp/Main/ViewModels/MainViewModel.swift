@@ -158,6 +158,9 @@ class MainViewModel {
                     
                     Text("Custom progressbar view").sectionTitleStyle(.light)
                     CustomProgressBarView.preview
+                    
+                    Text("Circular progress styles").sectionTitleStyle(.light)
+                    CircularProgressLoader.preview
                 }
             }
             .navigationTitle("Loaders")
@@ -232,47 +235,47 @@ class MainViewModel {
         }
         
         
-        LinearGradient(
-            gradient: Gradient(colors: [Color.backgroundGradientStart, Color.backgroundGradientEnd]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .edgesIgnoringSafeArea(.all)
-        .overlay {
-            TabView {
-                List {
-                    Section {
-                        ShadowButtonPreview()
-                    } header: {
-                        Text("Button 1").sectionTitleStyle()
-                    }
-                }
-                .tabItem {
-                    Label("Buttons", systemImage: "list.dash")
-                }
-                .navigationTitle("Buttons")
-                .navigationBarTitleDisplayMode(.inline)
-                .scrollContentBackground(.hidden)
-                
-                List {
-                    Section {
-                        ShadowButtonPreview()
-                    } header: {
-                        Text("Shadow button").sectionTitleStyle()
-                    }
-                }
-                
-                .safeAreaPadding(EdgeInsets(top: 0, leading: 0, bottom: 100, trailing: 0))
-                .navigationTitle("Cards")
-                .navigationBarTitleDisplayMode(.inline)
-                .scrollContentBackground(.hidden)
-                .listStyle(.insetGrouped)
-                .tabItem {
-                    Label("Styles", systemImage: "list.dash")
-                }
-            }
-            
-        }
+//        LinearGradient(
+//            gradient: Gradient(colors: [Color.backgroundGradientStart, Color.backgroundGradientEnd]),
+//            startPoint: .topLeading,
+//            endPoint: .bottomTrailing
+//        )
+//        .edgesIgnoringSafeArea(.all)
+//        .overlay {
+//            TabView {
+//                List {
+//                    Section {
+//                        ShadowButtonPreview()
+//                    } header: {
+//                        Text("Button 1").sectionTitleStyle()
+//                    }
+//                }
+//                .tabItem {
+//                    Label("Buttons", systemImage: "list.dash")
+//                }
+//                .navigationTitle("Buttons")
+//                .navigationBarTitleDisplayMode(.inline)
+//                .scrollContentBackground(.hidden)
+//                
+//                List {
+//                    Section {
+//                        ShadowButtonPreview()
+//                    } header: {
+//                        Text("Shadow button").sectionTitleStyle()
+//                    }
+//                }
+//                
+//                .safeAreaPadding(EdgeInsets(top: 0, leading: 0, bottom: 100, trailing: 0))
+//                .navigationTitle("Cards")
+//                .navigationBarTitleDisplayMode(.inline)
+//                .scrollContentBackground(.hidden)
+//                .listStyle(.insetGrouped)
+//                .tabItem {
+//                    Label("Styles", systemImage: "list.dash")
+//                }
+//            }
+//            
+//        }
     }
     
     static private var backgrounds: some View {

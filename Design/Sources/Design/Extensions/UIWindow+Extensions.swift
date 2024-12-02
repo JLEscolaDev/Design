@@ -19,8 +19,4 @@ public extension UIWindow {
 }
 
 
-public extension UIScreen {
-    static var current: UIScreen? {
-        UIWindow.current?.screen
-    }
-}
+

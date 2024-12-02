@@ -63,3 +63,30 @@ extension View {
         }
     }
 }
+
+extension View {
+    func withNotch(
+        allowedSides: NotchSides = .all,
+        notchFollowsTouch: Bool = true,
+        invertNotchDisplay: Bool = false,
+        onNotchEnded: ((NotchPosition, CGFloat) -> Void)? = nil
+    ) -> some View {
+        self.modifier(
+            NotchModifier(
+                vm: .init(
+                    allowedSides: allowedSides,
+                    notchFollowsTouch: notchFollowsTouch,
+                    invertNotchDisplay: invertNotchDisplay,
+                    onNotchEnded: onNotchEnded
+                )
+            )
+        )
+    }
+}
+
+extension View {
+    /// Used to detecte device rotation changes
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        self.modifier(DeviceRotationViewModifier(action: action))
+    }
+}
