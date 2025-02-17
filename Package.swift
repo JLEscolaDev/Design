@@ -19,8 +19,9 @@ let package = Package(
         .target(
             name: "Design",
             dependencies: [],
+            path: "Design",
             resources: [
-                .process("Resources/Assets.xcassets"), // Process the Assets file for being able to use it inside the package
+                .process("Resources/Assets.xcassets"),
                 .process("Resources/ice-liquid-1.mp3"),
                 .process("Resources/ice-liquid-2.mp3"),
                 .process("Resources/ice-liquid-3.mp3"),
@@ -29,7 +30,8 @@ let package = Package(
         ),
         .testTarget(
             name: "DesignTests",
-            dependencies: ["Design"]
+            dependencies: ["Design"],
+            path: "Design/Tests"
         ),
     ]
 )
