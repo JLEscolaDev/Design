@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct SpaceBackground: View {
+public struct SpaceBackground: View {
     private let starCount = 50
     @State private var stars: [Star] = []
 
-    init() {
+    public init() {
         var temp: [Star] = []
         for _ in 0..<starCount {
             temp.append(
@@ -31,7 +31,7 @@ struct SpaceBackground: View {
         _stars = State(initialValue: temp)
     }
 
-    var body: some View {
+    public var body: some View {
         GeometryReader { proxy in
             ZStack {
                 // Fondo oscuro con gradiente sutil

@@ -6,8 +6,8 @@
 //
 import SwiftUI
 
-struct Post : Identifiable {
-    var id = UUID()
+public struct Post : Identifiable {
+    public var id = UUID()
     var subtitle : String
     var title : String
     var extra : String

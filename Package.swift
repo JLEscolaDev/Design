@@ -2,7 +2,6 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 // Package.swift
-// swift-tools-version: 5.9
 import PackageDescription
 
 let package = Package(
@@ -19,8 +18,9 @@ let package = Package(
         .target(
             name: "Design",
             dependencies: [],
+            path: "Design/Sources",
             resources: [
-                .process("Resources/Assets.xcassets"), // Process the Assets file for being able to use it inside the package
+                .process("Resources/Assets.xcassets"),
                 .process("Resources/ice-liquid-1.mp3"),
                 .process("Resources/ice-liquid-2.mp3"),
                 .process("Resources/ice-liquid-3.mp3"),
@@ -29,7 +29,8 @@ let package = Package(
         ),
         .testTarget(
             name: "DesignTests",
-            dependencies: ["Design"]
+            dependencies: ["Design"],
+            path: "Design/Tests"
         ),
     ]
 )
