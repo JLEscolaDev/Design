@@ -84,9 +84,3 @@ extension View {
     }
 }
 
-extension View {
-    /// Used to detecte device rotation changes
-    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
-        self.modifier(DeviceRotationViewModifier(action: action))
-    }
-}

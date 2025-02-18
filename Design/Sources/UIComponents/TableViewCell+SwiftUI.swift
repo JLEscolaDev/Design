@@ -25,8 +25,8 @@
 //    }
 //}
 
-import UIKit
-import SwiftUI
+//import UIKit
+//import SwiftUI
 
 //class EventTableViewCell<Content: View>: UITableViewCell {
 //    private var hostingView: SwiftUIHostingView<Content>?
@@ -62,6 +62,42 @@ import SwiftUI
 //        hostingView?.setSwiftUIView(view)
 //    }
 //}
+import SwiftUI
+#if os(macOS)
+import AppKit
+
+public class SwiftUIHostingView<Content: View>: NSView {
+    private var hostingController: NSHostingController<AnyView>?
+
+    public func setSwiftUIView(_ view: Content) {
+        let typeErasedView = AnyView(view)
+
+        // If there's no existing hosting controller, create one and add its view.
+        if hostingController == nil {
+            hostingController = NSHostingController(rootView: typeErasedView)
+            guard let hostView = hostingController?.view else { return }
+
+            hostView.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(hostView)
+
+            NSLayoutConstraint.activate([
+                hostView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                hostView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                hostView.topAnchor.constraint(equalTo: topAnchor),
+                hostView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+        } else {
+            // If we already have a hosting controller, just update its rootView.
+            hostingController?.rootView = typeErasedView
+        }
+    }
+
+    public func clearSwiftUIView() {
+        hostingController?.rootView = AnyView(EmptyView())
+    }
+}
+
+#else
 
 public class SwiftUIHostingView<Content: View>: UIView {
     private var hostingController: UIHostingController<AnyView>?
@@ -123,6 +159,7 @@ public final class TableViewCell<Content: View>: UITableViewCell {
         }
     }
 }
+#endif
 
 //public final class TableViewCell<Content: View>: UITableViewCell {
 //    private var hostingController: UIHostingController<AnyView>?

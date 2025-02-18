@@ -28,8 +28,9 @@ public struct LiquidViewCell: View {
     private var rotationTime:CGFloat {
         animationModel.frameHeight > animationModel.previousFrameHeight ? 2.35 : 1.75
     }
-    
+#if os(iOS)
     @State var coreMotionVM = GlassReflectionEffectMotionViewModel()
+#endif
     @State var enableGlassEffect = false
     
     let beerStain: LinearGradient = LinearGradient(gradient: Gradient(colors: [
@@ -49,30 +50,31 @@ public struct LiquidViewCell: View {
             .lineLimit(1)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding([.leading, .trailing], 16)
-            .padding(.top, 10)
+            .padding(.top, 14)
+            .foregroundStyle(.black)
     }
     
     var knowMoreButton: some View {
+        #if os(macOS)
+        knowMoreButtonLabel
+            .onTapGesture {
+                knowMoreButtonAction()
+            }
+         // Button position based on his height and his position (if the button new position is out of the card, the offset moves it up)
+        .offset(x: -16, y: animationModel.frameHeight - buttonHeight > 0 ? 10 : -buttonHeight)
+        // Animate transition to fill and empty (go up and down) with a delay to simulate liquid environment
+        .animation(
+            .easeInOut(duration: 2).delay(
+                animationModel.frameHeight > animationModel.previousFrameHeight ? 0.7 : 0
+            ),
+            value: animationModel.frameHeight
+        )
+        
+        #else
         Button(action: {
-            animationModel.toggleAnimation()
-            // Rotate the button to a random angle between -25 and 15 and go back to its init position when it finishes
-            withAnimation(.easeInOut(duration: rotationTime/2).delay(animationModel.frameHeight > animationModel.previousFrameHeight ? 0.7 : 0)) {
-                rotationAngle = CGFloat.random(in: -25...15)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + rotationTime/2) {
-                withAnimation(.easeInOut(duration: rotationTime/2)) {
-                    rotationAngle = .zero
-                }
-            }
+            knowMoreButtonAction()
         }) {
-            Text("Saber más")
-                .foregroundColor(.black)
-                .font(.headline)
-                .padding([.top, .bottom], LiquidViewCell.BUTTON_PADDING)
-                .padding([.leading, .trailing], buttonLateralPaddings)
-                .background(.white)
-                .cornerRadius(100)
-                .rotationEffect(Angle(degrees: rotationAngle))
+            knowMoreButtonLabel
         }
         // Button position based on his height and his position (if the button new position is out of the card, the offset moves it up)
         .offset(x: -16, y: animationModel.frameHeight - buttonHeight > 0 ? 10 : -buttonHeight)
@@ -83,8 +85,31 @@ public struct LiquidViewCell: View {
             ),
             value: animationModel.frameHeight
         )
-        // Spring animation to improve the liquid environment feeling
-        .animation(.spring(response: 1, dampingFraction: 0.5, blendDuration: 0))
+        #endif
+    }
+    
+    private var knowMoreButtonLabel: some View {
+        Text("Saber más")
+            .foregroundColor(.black)
+            .font(.headline)
+            .padding([.top, .bottom], LiquidViewCell.BUTTON_PADDING)
+            .padding([.leading, .trailing], buttonLateralPaddings)
+            .background(.white)
+            .cornerRadius(100)
+            .rotationEffect(Angle(degrees: rotationAngle))
+    }
+    
+    private func knowMoreButtonAction() -> Void {
+        animationModel.toggleAnimation()
+        // Rotate the button to a random angle between -25 and 15 and go back to its init position when it finishes
+        withAnimation(.easeInOut(duration: rotationTime/2).delay(animationModel.frameHeight > animationModel.previousFrameHeight ? 0.7 : 0)) {
+            rotationAngle = CGFloat.random(in: -25...15)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + rotationTime/2) {
+            withAnimation(.easeInOut(duration: rotationTime/2)) {
+                rotationAngle = .zero
+            }
+        }
     }
     
     var liquidContainer: some View {
@@ -96,8 +121,8 @@ public struct LiquidViewCell: View {
                 .padding(.horizontal, 16)
                 
             // We use this colors that represents the orange color with 70% opacity and 90% opacity to keep this gradient style but allowing us to hide things behind the liquid
-            let orange07 = Color(uiColor: UIColor(red: 255/255, green: 172/255, blue: 55/255, alpha: 1))
-            let orange09 = Color(uiColor: UIColor(red: 255/255, green: 153/255, blue: 12/255, alpha: 1))
+            let orange07 = MultiplatformColor.fromRGB(red: 255/255, green: 172/255, blue: 55/255, alpha: 1).toSwiftUIColor
+            let orange09 = MultiplatformColor.fromRGB(red: 255/255, green: 153/255, blue: 12/255, alpha: 1).toSwiftUIColor
             Liquid(speed: animationModel.liquidSpeed, amplitude: animationModel.liquidAmplitude, color: LinearGradient(gradient: Gradient(colors: [orange07,orange09, .orange, .orange,.orange, .orange, orange09]), startPoint: .top, endPoint: .bottom))
                 .overlay {
                     // We set the id linked to the frameHeight to ensure we refresh the overlay height when recycling this view.
@@ -109,11 +134,13 @@ public struct LiquidViewCell: View {
                 .animation(.easeInOut(duration: 2.25), value: animationModel.frameHeight)
                 .overlay (alignment: .topTrailing) {
                     knowMoreButton
-                }.blur(radius: 0.6)
+                }
+                .blur(radius: 0.5)
                 .frame(height: animationModel.frameHeight)
         }
     }
     
+    #if os(iOS)
     var gradientColorGlassEfect: some View {
         coreMotionVM.glassEffect
             .animation(
@@ -121,13 +148,17 @@ public struct LiquidViewCell: View {
                 value: coreMotionVM.roll
             )
     }
+    #endif
     
     public var body: some View {
         ZStack(alignment: .topTrailing) {
             // Round only bottom corners
             UnevenRoundedRectangle(cornerRadii: .init(topLeading: 2, bottomLeading: 25, bottomTrailing: 25, topTrailing: 2))
-//                .fill(.white)
                 .fill(beerStain)
+                .background {
+                    UnevenRoundedRectangle(cornerRadii: .init(topLeading: 2, bottomLeading: 25, bottomTrailing: 25, topTrailing: 2))
+                        .fill(Color.white)
+                }
                 .frame(height: 200)
                 .overlay {
                     VStack {
@@ -151,11 +182,15 @@ public struct LiquidViewCell: View {
                         enableGlassEffect = false
                     }
                 }
-        }.overlay {
+        }
+        #if os(iOS)
+        .overlay {
             if enableGlassEffect {
                 gradientColorGlassEfect
             }
-        }.drawingGroup()
+        }
+        #endif
+        .drawingGroup()
     }
 }
 

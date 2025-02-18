@@ -53,7 +53,7 @@ public struct ScrollableTabBar: View {
         }
         .frame(height: 60)
         .shadow(radius: 5)
-        .onChange(of: vm.selectedTab) { newSelectedTab in
+        .onChange(of: vm.selectedTab) { oldValue, newSelectedTab in
             selectedTab = newSelectedTab
         }
     }

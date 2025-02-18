@@ -1,11 +1,8 @@
-//
-//  DayOrNightWithFirefliesBackground.swift
-//  Design
-//
-//  Created by Jose Luis Escolá García on 6/11/24.
-//
-
 import SwiftUI
+
+#if os(macOS)
+import AppKit
+#endif
 
 public struct DayOrNightWithFirefliesBackground: View {
     public init(isDay: Binding<Bool>) {
@@ -17,24 +14,34 @@ public struct DayOrNightWithFirefliesBackground: View {
     
     public var body: some View {
         ZStack {
-            // Fondo de gradiente de "luz de luna" que creamos previamente
+            // Background
             DayNightToggleBackground(isDay: $isDay)
             
-            // Capa de luciérnagas
-            
-                ForEach(fireflies) { firefly in
-                    FireflyView(firefly: firefly)
-                }.opacity(isDay ? 0 : 1) // Ocultamos las luciérngas de día usando la animación del toggle
-            
-            
+            // Fireflies
+            ForEach(fireflies) { firefly in
+                FireflyView(firefly: firefly)
+            }
+            .opacity(isDay ? 0 : 1) // Hide fireflies by day
         }
         .onAppear {
-            // Generamos luciérnagas al aparecer la vista
-            fireflies = generateFireflies(count: 10, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            // Get screen dimensions differently for macOS vs iOS
+            #if os(macOS)
+            let screenWidth  = NSScreen.main?.frame.width  ?? 800
+            let screenHeight = NSScreen.main?.frame.height ?? 600
+            #else
+            let screenWidth  = UIScreen.main.bounds.width
+            let screenHeight = UIScreen.main.bounds.height
+            #endif
+            
+            fireflies = generateFireflies(
+                count: 10,
+                width: screenWidth,
+                height: screenHeight
+            )
         }
     }
     
-    // Genera luciérnagas en posiciones aleatorias con tamaños, opacidades y duración de animación variable
+    // Generate random-position fireflies
     func generateFireflies(count: Int, width: CGFloat, height: CGFloat) -> [Firefly] {
         return (0..<count).map { _ in
             Firefly(
@@ -69,13 +76,13 @@ struct DayOrNightWithFirefliesBackgroundPreview: View {
                 withAnimation(.easeInOut(duration: 2)) {
                     isDay.toggle()
                 }
-
             }) {
                 Text("Toggle Day/Night")
                     .padding()
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
             }
+            .multiplatformButton()
             .padding(.bottom, 50)
         }
     }

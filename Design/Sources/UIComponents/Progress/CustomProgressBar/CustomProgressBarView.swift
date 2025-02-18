@@ -38,7 +38,7 @@ public struct CustomProgressBarView: View {
             }
         }
         .padding()
-        .onChange(of: viewModel.progress) { newValue in
+        .onChange(of: viewModel.progress) { oldValue, newValue in
             handleMilestoneReached(newValue)
         }
     }

@@ -20,7 +20,7 @@ struct DynamicBox: View {
     @State private var selectedCard: Int = -1
     @State private var openCard: Bool = false
     @State private var dragOffset: CGFloat = 0
-    let cards: [UIImage]
+    let cards: [MultiplatformImage]
     let detailData: [InfoCard]
     
     init(cards: [InfoCard]) {
@@ -133,7 +133,7 @@ struct DynamicBox: View {
             let newHeight = isCardSelected && selectedCard != 0 ? height*1.1 : height
             let topPadding:CGFloat = isCardSelected && selectedCard == 0 ? 15 : 0
            
-            Image(uiImage: cards[cardIndex])
+            cards[cardIndex].toImage
                 .resizable()
                 .frame(width: isCardSelected ? width+abs(dragOffset) : width, height: isCardSelected ?  newHeight+abs(dragOffset*1.5) : newHeight)
                 .drawingGroup()
@@ -253,7 +253,8 @@ extension DynamicBox {
 }
 
 extension View {
-    func snapshot(size: CGSize) -> UIImage {
+    func snapshot(size: CGSize) -> MultiplatformImage {
+        #if os(iOS)
         let controller = UIHostingController(rootView: self.frame(width: size.width, height: size.height))
         let view = controller.view
 
@@ -265,10 +266,22 @@ extension View {
         window.makeKeyAndVisible()
 
         let renderer = UIGraphicsImageRenderer(size: size)
-
         return renderer.image { _ in
             view?.layer.render(in: UIGraphicsGetCurrentContext()!)
         }
+        #else
+        let controller = NSHostingController(rootView: self.frame(width: size.width, height: size.height))
+        let view = controller.view
+
+        view.frame = CGRect(origin: .zero, size: size)
+
+        let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds)
+        view.cacheDisplay(in: view.bounds, to: rep!)
+
+        let image = NSImage(size: size)
+        image.addRepresentation(rep!)
+        return image
+        #endif
     }
 }
 
@@ -295,6 +308,14 @@ extension View {
 //    }
 //}
 
+#if os(iOS)
+import SwiftUI
+typealias HostingController = UIHostingController
+#else
+import SwiftUI
+typealias HostingController = NSHostingController
+#endif
+
 
 import SwiftUI
 
@@ -319,17 +340,17 @@ struct TestView: View {
                         PostView(post: self.$posts[index], isDetailed: self.$showDetails)
                         .offset(y: self.posts[index].showDetails ? -reader.frame(in: .global).minY : 0)
                         .onTapGesture {
-                            if !self.posts[index].showDetails {
-                                self.posts[index].showDetails.toggle()
-                                self.showDetails.toggle()
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.2)) {
+                                if !self.posts[index].showDetails {
+                                    self.posts[index].showDetails.toggle()
+                                    self.showDetails.toggle()
+                                }
                             }
                         }
-                        // Change this animation to what you please, or change the numbers around. It's just a preference.
-                        .animation(.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.2))
                         // If there is one view expanded then hide all other views that are not
                         .opacity(self.showDetails ? (self.posts[index].showDetails ? 1 : 0) : 1)
                     }
-                    .frame(height: self.posts[index].showDetails ? UIScreen.current?.bounds.size.height : 100, alignment: .center)
+                    .frame(height: self.posts[index].showDetails ? MultiplatformScreen.bounds.size.height : 100, alignment: .center)
                     .simultaneousGesture(
                         // 500 will disable ScrollView effect
                         DragGesture(minimumDistance: self.posts[index].showDetails ? 0 : 500)

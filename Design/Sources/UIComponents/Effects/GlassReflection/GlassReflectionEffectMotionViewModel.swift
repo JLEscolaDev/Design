@@ -4,6 +4,7 @@
 //
 //  Created by Jose Luis Escolá García on 7/11/24.
 //
+#if os(iOS)
 import SwiftUI
 import CoreMotion
 
@@ -146,3 +147,4 @@ final class GlassReflectionEffectMotionViewModel {
             )
     }.frame(width: 200, height: 200)
 }
+#endif

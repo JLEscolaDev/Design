@@ -33,6 +33,7 @@ public struct SplitView<TopContent: View, BottomContent: View>: View {
                         height: vm.multiViewVM.secondViewSizes.height
                     )
             }
+            #if os(iOS)
             .onRotate { newOrientation in
                 let orientation: Orientation = newOrientation.isLandscape ? .horizontal : .vertical
                 if orientation != vm.multiViewVM.deviceOrientation {
@@ -40,6 +41,7 @@ public struct SplitView<TopContent: View, BottomContent: View>: View {
                     vm.multiViewVM.translation = .zero
                 }
             }
+            #endif
         }
         .background(.black)
     }
@@ -126,10 +128,11 @@ public struct SplitView<TopContent: View, BottomContent: View>: View {
                         }
                         
                         if isLoading {
-                            CircularProgressLoader(style: .expandingCircles)
-                                .background(.white)
-                                .transition(.opacity) // Smooth fade-in/out
-                                .animation(.easeInOut(duration: 0.3))
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                CircularProgressLoader(style: .expandingCircles)
+                                    .background(.white)
+                                    .transition(.opacity) // Smooth fade-in/out
+                            }
                         }
                         
                         VStack {
@@ -154,7 +157,7 @@ public struct SplitView<TopContent: View, BottomContent: View>: View {
                     .transition(.opacity)
                 }
             }
-        ).onChange(of: selectedSide) { newValue in
+        ).onChange(of: selectedSide) { oldValue, newValue in
             if newValue == .left {
                 openInBrowser(urlString: "https://es.linkedin.com/in/jose-luis-escol%C3%A1-garc%C3%ADa")
             }
@@ -163,18 +166,28 @@ public struct SplitView<TopContent: View, BottomContent: View>: View {
     
     /// Opens default browser
     private func openInBrowser(urlString: String) {
-        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+        guard let url = URL(string: urlString) else {
+            isWebViewPresented = false
+            isLoading = false
+            return
+        }
+        
+        #if os(iOS)
+        if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:]) { success in
                 if success {
-                    // Opcional: Lógica adicional si es necesario al abrir la URL
                     isWebViewPresented = false
                     isLoading = false
                 }
             }
         } else {
-            // Manejo de error si la URL no es válida
             isWebViewPresented = false
             isLoading = false
         }
+        #elseif os(macOS)
+        NSWorkspace.shared.open(url)
+        isWebViewPresented = false
+        isLoading = false
+        #endif
     }
 }

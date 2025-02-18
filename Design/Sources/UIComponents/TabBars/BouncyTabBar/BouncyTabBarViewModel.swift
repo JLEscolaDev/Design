@@ -5,6 +5,7 @@
 //  Created by Jose Luis Escolá García on 5/6/24.
 //
 
+#if os(iOS)
 import SwiftUI
 
 /// A view model class for the BouncyTabBar, managing the state and behavior of the tab bar.
@@ -41,3 +42,4 @@ class BouncyTabBarViewModel {
         UITabBar.appearance().isHidden = true
     }
 }
+#endif

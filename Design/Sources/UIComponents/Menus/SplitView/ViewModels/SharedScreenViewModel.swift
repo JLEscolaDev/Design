@@ -34,7 +34,7 @@ public class SharedScreenViewModel {
         switch (orientation, deviceOrientation) {
             case (.vertical, .vertical), (.vertical, .horizontal), (nil, .vertical):
                     .vertical
-            case (.horizontal, .vertical), (.vertical, .vertical), (.horizontal, .horizontal), (nil, .horizontal):
+            case (.horizontal, .vertical), (.horizontal, .horizontal), (nil, .horizontal):
                     .horizontal
         }
     }

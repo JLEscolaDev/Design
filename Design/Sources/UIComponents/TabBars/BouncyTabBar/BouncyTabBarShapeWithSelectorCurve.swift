@@ -5,6 +5,7 @@
 //  Created by Jose Luis Escolá García on 5/6/24.
 //
 
+#if os(iOS)
 import SwiftUI
 
 /// A custom shape for the BouncyTabBar with a selector curve.
@@ -46,3 +47,4 @@ struct BouncyTabBarShapeWithSelectorCurve: Shape {
         }
     }
 }
+#endif

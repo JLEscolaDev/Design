@@ -1,5 +1,11 @@
 import SwiftUI
 
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
+
 public struct EventCard: View {
     @State var viewModel: EventCardViewModel
 
@@ -29,14 +35,14 @@ public struct EventCard: View {
                             .resizable()
                             .scaledToFill()
                     case .success(let image):
-                        Image(uiImage: image)
+                        image.toImage // ✅ Now it works on both iOS and macOS
                             .resizable()
                             .scaledToFill()
-                        
                 }
                 gradientOverlay(cornerRadius: cornerRadius)
-            }.frame(maxWidth: .infinity, maxHeight: 150)
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            }
+            .frame(maxWidth: .infinity, maxHeight: 150)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         }
     }
 
@@ -83,6 +89,8 @@ public struct EventCard: View {
     }
 }
 
+// MARK: - Preview
+
 public extension EventCard {
     static var preview: some View {
         VStack {
@@ -105,7 +113,7 @@ public extension EventCard {
             .frame(width: 300, height: 200)
             
             EventCard(viewModel: EventCardViewModel(
-                title: "Event 2",
+                title: "Event 3",
                 location: nil,
                 startDate: "01/02/2023",
                 endDate: "02/02/2023",

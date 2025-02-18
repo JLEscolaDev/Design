@@ -243,7 +243,7 @@ struct StickerPreview: View {
             .padding(30)
         }
         .onAppear {
-            for index in 1...5 {
+            for _ in 1...5 {
                 images.append(.init(image: .init(.beerTestScreenshot)))
             }
         }

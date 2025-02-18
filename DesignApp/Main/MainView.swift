@@ -10,10 +10,12 @@ import SwiftUI
 struct MainView: View {
     @State private var vm = MainViewModel()
     
+    #if os(iOS)
     init() {
         let appearance = UINavigationBarAppearance()
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
+    #endif
 
     var body: some View {
         NavigationStack {
@@ -48,6 +50,10 @@ struct MainView: View {
                     }
                     .padding(.top)
                 }
+                #if os(macOS)
+                .buttonStyle(.plain)                // Removes macOS default button border/highlight
+                .focusable(false)                  // Disables the focus ring on macOS
+                #endif
                 .navigationTitle("Components")
             }
         }

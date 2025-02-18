@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 
 /// A view representing the BouncyTabBar, a custom tab bar with animated selection effects.
@@ -70,5 +71,4 @@ extension BouncyTabBar {
     BouncyTabBar.preview
 }
 
-
-
+#endif

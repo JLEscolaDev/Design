@@ -9,9 +9,9 @@ import SwiftUI
 struct DirtParticle {
     var position: CGPoint
     var shape: Path
-    var color: Color
+    var color: MultiplatformColor
     
-    init(position: CGPoint, color: Color) {
+    init(position: CGPoint, color: MultiplatformColor) {
         self.position = position
         self.shape = DirtParticle.generateRandomPath(at: position)
         self.color = color

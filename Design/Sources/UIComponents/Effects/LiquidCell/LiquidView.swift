@@ -181,8 +181,8 @@ private struct LiquidInteractivePreview: View {
 struct Liquid_Previews: PreviewProvider {
     static var previews: some View {
         // We use this colors that represents the orange color with 70% opacity and 90% opacity to keep this gradient style but allowing us to hide things behind the liquid
-        let orange07 = Color(uiColor: UIColor(red: 255/255, green: 172/255, blue: 55/255, alpha: 1))
-        let orange09 = Color(uiColor: UIColor(red: 255/255, green: 153/255, blue: 12/255, alpha: 1))
+        let orange07 = MultiplatformColor.fromRGB(red: 255/255, green: 172/255, blue: 55/255, alpha: 1).toSwiftUIColor
+        let orange09 = MultiplatformColor.fromRGB(red: 255/255, green: 153/255, blue: 12/255, alpha: 1).toSwiftUIColor
         
         Liquid(speed: 2,
                color: LinearGradient(gradient: Gradient(colors: [orange07,orange09, .orange, .orange,.orange, .orange, orange09]), startPoint: .top, endPoint: .bottom))

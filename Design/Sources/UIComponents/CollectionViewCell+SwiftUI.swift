@@ -21,8 +21,8 @@
 //        ])
 //    }
 //}
-import UIKit
-import SwiftUI
+//import UIKit
+//import SwiftUI
 
 //public class CollectionViewCell<Content: View>: UICollectionViewCell {
 //    private var hostingController: UIHostingController<Content>?
@@ -84,6 +84,71 @@ import SwiftUI
 //    }
 //}
 
+#if os(macOS)
+import SwiftUI
+import AppKit
+
+public class CollectionViewItem<Content>: NSCollectionViewItem where Content: View {
+    
+    private var hostingController: NSHostingController<Content>?
+
+    // MARK: - Lifecycle
+    public override func loadView() {
+        // On macOS, we need to create an NSView for this item manually.
+        self.view = NSView(frame: .zero)
+    }
+
+    /// Configure the SwiftUI content for this collection item.
+    /// - Parameters:
+    ///   - content: The SwiftUI view you want to display
+    ///   - size: Optional size for the view. If omitted, the view will size itself.
+    public func set(content: Content, size: CGSize? = nil) {
+        // Remove any existing hosting controller before configuring a new one
+        if hostingController != nil {
+            hostingController?.view.removeFromSuperview()
+            hostingController = nil
+        }
+
+        let controller = NSHostingController(rootView: content)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Add the SwiftUI view to the NSCollectionViewItem's main view
+        view.addSubview(controller.view)
+        hostingController = controller
+
+        // Centering constraints
+        NSLayoutConstraint.activate([
+            controller.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            controller.view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
+        // If a fixed size is provided, explicitly constrain the view
+        if let viewSize = size {
+            NSLayoutConstraint.activate([
+                controller.view.widthAnchor.constraint(equalToConstant: viewSize.width),
+                controller.view.heightAnchor.constraint(equalToConstant: viewSize.height)
+            ])
+        } else {
+            // Otherwise, let the SwiftUI content size itself
+            NSLayoutConstraint.activate([
+                controller.view.topAnchor.constraint(equalTo: view.topAnchor),
+                controller.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                controller.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+        }
+    }
+
+    // MARK: - Reuse
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        // Ensure the hosting controller’s view is removed
+        hostingController?.view.removeFromSuperview()
+        hostingController = nil
+    }
+}
+
+#else
 import SwiftUI
 import UIKit
 
@@ -133,3 +198,4 @@ public class CollectionViewCell<Content>: UICollectionViewCell where Content: Vi
     }
 }
 
+#endif

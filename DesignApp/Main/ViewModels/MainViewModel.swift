@@ -63,9 +63,18 @@ class MainViewModel {
                 }
                 .safeAreaPadding(EdgeInsets(top: 0, leading: 0, bottom: 100, trailing: 0))
                 .navigationTitle("Cards")
+                #if os(macOS)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Cards").font(.headline)
+                    }
+                }
+                .listStyle(.inset)
+                #else
                 .navigationBarTitleDisplayMode(.inline)
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
+                #endif
             }
     }
     
@@ -117,8 +126,17 @@ class MainViewModel {
                 
             }
             .navigationTitle("Text Fields")
+            #if os(macOS)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Text Fields").font(.headline)
+                }
+            }
+            .listStyle(.inset)
+            #else
             .navigationBarTitleDisplayMode(.inline)
             .scrollContentBackground(.hidden)
+            #endif
         }
     }
     
@@ -135,8 +153,17 @@ class MainViewModel {
                 DashedSeparatorLine()
             }
             .navigationTitle("Custom components")
+            #if os(macOS)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Custom components").font(.headline)
+                }
+            }
+            .listStyle(.inset)
+            #else
             .navigationBarTitleDisplayMode(.inline)
             .scrollContentBackground(.hidden)
+            #endif
         }
     }
     
@@ -182,7 +209,7 @@ class MainViewModel {
                                 RoundedRectangle(cornerRadius: 10)
                                     .foregroundStyle(.white)
                                     .overlay {
-                                        RectanglePlustButton.preview
+                                        RectanglePlusButton.preview
                                             .padding(30)
                                     }
                                     .frame(height: 150)
@@ -193,9 +220,18 @@ class MainViewModel {
                         
                         .safeAreaPadding(EdgeInsets(top: 20, leading: 0, bottom: 150, trailing: 0))
                         .navigationTitle("Buttons")
+                        #if os(macOS)
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                Text("Buttons").font(.headline)
+                            }
+                        }
+                        .listStyle(.inset)
+                        #else
                         .navigationBarTitleDisplayMode(.inline)
                         .scrollContentBackground(.hidden)
                         .listStyle(.insetGrouped)
+                        #endif
                     }
                     .tabItem {
                         Image(systemName: "star")
@@ -224,9 +260,18 @@ class MainViewModel {
                 
                 .safeAreaPadding(EdgeInsets(top: 20, leading: 0, bottom: 150, trailing: 0))
                 .navigationTitle("Button modifiers")
+                #if os(macOS)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Button modifiers").font(.headline)
+                    }
+                }
+                .listStyle(.inset)
+                #else
                 .navigationBarTitleDisplayMode(.inline)
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
+                #endif
             }
             .tabItem {
                 Image(systemName: "pencil.line")
@@ -318,9 +363,18 @@ class MainViewModel {
                 }.listRowBackground(Color.red.opacity(0.2))
                 .safeAreaPadding(EdgeInsets(top: 0, leading: 0, bottom: 150, trailing: 0))
                 .navigationTitle("Non interactive components")
+                #if os(macOS)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Non interactive components").font(.headline)
+                    }
+                }
+                .listStyle(.inset)
+                #else
                 .navigationBarTitleDisplayMode(.inline)
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
+                #endif
                 .background(.blue)
             }
         }
@@ -375,9 +429,8 @@ struct TabBars: View {
                 Text("Chip tab bar").sectionTitleStyle(.dark)
                 ChipTabBarPreview()
                 
+            #if os(iOS)
                 Text("Bouncy tab bar").sectionTitleStyle(.dark)
-                
-                // El botón que abre la hoja modal para BouncyTabBar
                 Button("Show Bouncy Tab Bar") {
                     isBouncyTabBarSheetPresented = true
                 }
@@ -386,10 +439,13 @@ struct TabBars: View {
                         .presentationDetents([.medium, .large]) // Ajusta los tamaños disponibles para la hoja
                         .presentationDragIndicator(.visible) // Muestra el indicador para arrastrar la hoja
                 }
+                #endif
             }
             .navigationTitle("Tab Bars")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .scrollContentBackground(.hidden)
+            #endif
         }
     }
 }
@@ -419,13 +475,17 @@ private struct CellsView: View {
                     case "Liquid":
                         LiquidViewCell.preview
 //                            .scrollContentBackground(.hidden)
+                            #if os(iOS)
                             .listStyle(.grouped)
+                            #endif
                     default:
                         EmptyView().opacity(0)
                 }
             }
             .navigationTitle("Cells")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 }
@@ -463,16 +523,25 @@ struct Carousles: View {
                     
                     // Link para mostrar CardsrouselView en una nueva pantalla
                     NavigationLink(destination: CardsrouselPreview()) {
-                        Text("Show Bouncy Tab Bar")
+                        Text("Show draggable cards")
                     }
                     .padding(.vertical)
                 }
                 .listRowBackground(Color.red.opacity(0.2))
                 .safeAreaPadding(EdgeInsets(top: 0, leading: 0, bottom: 150, trailing: 0))
                 .navigationTitle("Carousels")
+                #if os(macOS)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Carousels").font(.headline)
+                    }
+                }
+                .listStyle(.inset)
+                #else
                 .navigationBarTitleDisplayMode(.inline)
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
+                #endif
                 .background(.blue)
             }
         }

@@ -19,7 +19,7 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
     init(
         cursorSize: CGFloat,
         onFinish: Binding<Bool>,
-        overlayImage: UIImage?,
+        overlayImage: MultiplatformImage?,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder overlayView: @escaping () -> OverlayView
     ) {
@@ -38,7 +38,7 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
     @Binding private var onFinish: Bool
     
     @State private var overlayImageFrame: CGRect = .zero
-    @State private var overlayImage: UIImage?
+    @State private var overlayImage: MultiplatformImage?
     @State private var allowGeneratingMoreParticles = true
     
     var body: some View {
@@ -60,7 +60,7 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
                         }
                     }
                 )
-                .animation(.easeInOut)
+                .animation(.easeInOut, value: onFinish)
                 .gesture(
                     DragGesture()
                         .updating($gestureLocation, body: { value, out, _ in
@@ -114,7 +114,7 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
                 overlayImageFrame = frame
             }
         }
-        .onChange(of: onFinish) { value in
+        .onChange(of: onFinish) { oldValue, value in
             if (!onFinish && !strokes.isEmpty) {
                 withAnimation(.easeInOut) {
                     resetView()
@@ -173,16 +173,17 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
         let scaledY = point.y / canvasSize.height * overlayImage.size.height
         let pointInOverlay = CGPoint(x: scaledX, y: scaledY)
         
-        let color = getPixelColor(at: pointInOverlay, from: overlayImage)
-        
-        for _ in 0..<5 {
-            let randomXOffset = CGFloat.random(in: -20...20)
-            let randomYOffset = CGFloat.random(in: -20...20)
-            let dirtPoint = CGPoint(x: point.x + randomXOffset, y: point.y + randomYOffset)
-            let darkerColor = color.darker(by: 0.3)
-            let newParticle = DirtParticle(position: dirtPoint, color: darkerColor)
-            if !isPointInStrokes(point: dirtPoint) {
-                dirtParticles.append(newParticle)
+        if let color = overlayImage.getPixelColor(at: pointInOverlay) {
+            
+            for _ in 0..<5 {
+                let randomXOffset = CGFloat.random(in: -20...20)
+                let randomYOffset = CGFloat.random(in: -20...20)
+                let dirtPoint = CGPoint(x: point.x + randomXOffset, y: point.y + randomYOffset)
+                let darkerColor = color.darker(by: 0.3)
+                let newParticle = DirtParticle(position: dirtPoint, color: darkerColor)
+                if !isPointInStrokes(point: dirtPoint) {
+                    dirtParticles.append(newParticle)
+                }
             }
         }
     }
@@ -206,20 +207,20 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
     }
     
     /// - Description: Gets the color from the image pixel in the selected position
-    private func getPixelColor(at point: CGPoint, from image: UIImage) -> Color {
-        guard let cgImage = image.cgImage,
-              let dataProvider = cgImage.dataProvider,
-              let data = dataProvider.data,
-              let bytes = CFDataGetBytePtr(data) else { return Color.gray }
-        let bytesPerPixel = 4
-        let bytesPerRow = cgImage.bytesPerRow
-        let byteIndex = Int(point.y) * bytesPerRow + Int(point.x) * bytesPerPixel
-        
-        let r = CGFloat(bytes[byteIndex]) / 255.0
-        let g = CGFloat(bytes[byteIndex + 1]) / 255.0
-        let b = CGFloat(bytes[byteIndex + 2]) / 255.0
-        let a = CGFloat(bytes[byteIndex + 3]) / 255.0
-        
-        return Color(red: r, green: g, blue: b, opacity: a)
-    }
+//    private func getPixelColor(at point: CGPoint, from image: UIImage) -> Color {
+//        guard let cgImage = image.cgImage,
+//              let dataProvider = cgImage.dataProvider,
+//              let data = dataProvider.data,
+//              let bytes = CFDataGetBytePtr(data) else { return Color.gray }
+//        let bytesPerPixel = 4
+//        let bytesPerRow = cgImage.bytesPerRow
+//        let byteIndex = Int(point.y) * bytesPerRow + Int(point.x) * bytesPerPixel
+//        
+//        let r = CGFloat(bytes[byteIndex]) / 255.0
+//        let g = CGFloat(bytes[byteIndex + 1]) / 255.0
+//        let b = CGFloat(bytes[byteIndex + 2]) / 255.0
+//        let a = CGFloat(bytes[byteIndex + 3]) / 255.0
+//        
+//        return Color(red: r, green: g, blue: b, opacity: a)
+//    }
 }

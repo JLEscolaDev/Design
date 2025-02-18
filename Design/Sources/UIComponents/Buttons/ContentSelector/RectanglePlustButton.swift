@@ -7,65 +7,62 @@
 
 import SwiftUI
 
-public struct RectanglePlustButton: View {
+public struct RectanglePlusButton: View {
     public init(cornerRadius: CGFloat = 20) {
         self.cornerRadius = cornerRadius
     }
     
-    var cornerRadius:CGFloat = 20
+    var cornerRadius: CGFloat = 20
     private var tintColor: Color = .black
     
     // Default variables used to keep always same aspect ratio
-    private let defaultFontSize:Double = 120
+    private let defaultFontSize: Double = 120
     private let defaultFrameSize: Double = 100
     private let defaultLineWidth: Double = 10
     
     public var body: some View {
         GeometryReader { geometry in
             let lineWidth = geometry.size.width * defaultLineWidth / defaultFrameSize
+            let plusSize = geometry.size.width * defaultFontSize / defaultFrameSize
             
             RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(lineWidth: lineWidth)
                 .foregroundColor(tintColor)
                 .overlay {
-                    let plusSize = geometry.size.width * defaultFontSize / defaultFrameSize
                     VStack(spacing: 0) {
                         Text("+")
                             .font(.system(size: plusSize, weight: .medium, design: .rounded))
-                    Spacer()
-                    }.offset(y: -plusSize*0.05)
+                        Spacer()
+                    }
+                    .offset(y: -plusSize * 0.05) // Slight vertical offset to center the plus visually
                 }
         }
     }
     
     // Custom modifier for tint color
-    public func tintColor(_ tintColor: Color) -> RectanglePlustButton {
+    public func tintColor(_ tintColor: Color) -> RectanglePlusButton {
         var copy = self
         copy.tintColor = tintColor
         return copy
     }
 }
 
+// MARK: - PREVIEW
 
-
-
-// - MARK: PREVIEW
-
-extension RectanglePlustButton {
-    public static var preview: some View { RectanglePlustButtonPreview() }
+extension RectanglePlusButton {
+    public static var preview: some View { RectanglePlusButtonPreview() }
 }
 
 #Preview {
-    RectanglePlustButton.preview
+    RectanglePlusButton.preview
 }
-
 
 fileprivate struct Option: Identifiable {
     let id: Int
     let view: AnyView?
 }
 
-@_spi(Demo) public struct RectanglePlustButtonPreview: View {
+@_spi(Demo) public struct RectanglePlusButtonPreview: View {
     @State private var selectedOptionLeft: Option?
     @State private var selectedOptionCenter: Option?
     @State private var selectedOptionRight: Option?
@@ -83,7 +80,7 @@ fileprivate struct Option: Identifiable {
     public var body: some View {
         GeometryReader { geometry in
             HStack {
-                // Left Button with Selection Logic
+                // Left Button
                 Button(action: {
                     isSelectingLeftOption.toggle()
                 }, label: {
@@ -91,7 +88,7 @@ fileprivate struct Option: Identifiable {
                         selectedView
                             .frame(width: geometry.size.width * 0.2, height: geometry.size.width * 0.2)
                     } else {
-                        RectanglePlustButton(cornerRadius: geometry.size.width * 0.025)
+                        RectanglePlusButton(cornerRadius: geometry.size.width * 0.025)
                             .tintColor(.yellow.opacity(0.3))
                             .foregroundStyle(.yellow)
                             .frame(width: geometry.size.width * 0.2, height: geometry.size.width * 0.2)
@@ -106,7 +103,7 @@ fileprivate struct Option: Identifiable {
                 
                 Spacer()
                 
-                // Center Button with Selection Logic
+                // Center Button
                 Button(action: {
                     isSelectingCenterOption.toggle()
                 }, label: {
@@ -114,7 +111,7 @@ fileprivate struct Option: Identifiable {
                         selectedView
                             .frame(width: geometry.size.width * 0.3, height: geometry.size.width * 0.3)
                     } else {
-                        RectanglePlustButton(cornerRadius: geometry.size.width * 0.025)
+                        RectanglePlusButton(cornerRadius: geometry.size.width * 0.025)
                             .tintColor(.yellow.opacity(0.8))
                             .foregroundStyle(.yellow)
                             .frame(width: geometry.size.width * 0.3, height: geometry.size.width * 0.3)
@@ -129,7 +126,7 @@ fileprivate struct Option: Identifiable {
                 
                 Spacer()
                 
-                // Right Button with Selection Logic
+                // Right Button
                 Button(action: {
                     isSelectingRightOption.toggle()
                 }, label: {
@@ -137,7 +134,7 @@ fileprivate struct Option: Identifiable {
                         selectedView
                             .frame(width: geometry.size.width * 0.2, height: geometry.size.width * 0.2)
                     } else {
-                        RectanglePlustButton(cornerRadius: geometry.size.width * 0.025)
+                        RectanglePlusButton(cornerRadius: geometry.size.width * 0.025)
                             .tintColor(.yellow.opacity(0.3))
                             .foregroundStyle(.yellow)
                             .frame(width: geometry.size.width * 0.2, height: geometry.size.width * 0.2)
@@ -151,10 +148,14 @@ fileprivate struct Option: Identifiable {
                 }
             }
             .padding(.horizontal, geometry.size.width * 0.05)
+            .padding(.vertical, geometry.size.height * 0.05)
         }
+        #if os(macOS)
+        .buttonStyle(.plain)                // Removes macOS default button border/highlight
+        .focusable(false)                  // Disables the focus ring on macOS
+        #endif
     }
 }
-
 
 private struct OptionSelectionView: View {
     let options: [Option]
@@ -168,11 +169,17 @@ private struct OptionSelectionView: View {
                 }) {
                     option.view
                         .frame(width: 30, height: 30)
-                    .padding()
+                        .padding()
                 }
+                #if os(macOS)
+                .buttonStyle(.plain)                // Removes macOS default button border/highlight
+                .focusable(false)                  // Disables the focus ring on macOS
+                #endif
             }
             .navigationTitle("Select Option")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 }

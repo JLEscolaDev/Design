@@ -5,6 +5,7 @@
 //  Created by Jose Luis Escolá García on 5/6/24.
 //
 
+#if os(iOS)
 import SwiftUI
 
 /// A view representing a single tab bar item.
@@ -26,3 +27,4 @@ public struct BouncyTabBarItem: View {
         view
     }
 }
+#endif

@@ -5,6 +5,7 @@
 //  Created by Jose Luis Escolá García on 5/6/24.
 //
 
+#if os(iOS)
 import SwiftUI
 
 /// A view representing a single button in the BouncyTabBar.
@@ -141,3 +142,4 @@ struct BouncyTabBarButton: View {
         }
     }
 }
+#endif

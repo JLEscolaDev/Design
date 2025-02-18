@@ -7,7 +7,7 @@
 import SwiftUI
 
 public struct Event: Identifiable, Codable {
-    public let id = UUID()
+    public var id = UUID()
     let name: String
     let date: Date
 }

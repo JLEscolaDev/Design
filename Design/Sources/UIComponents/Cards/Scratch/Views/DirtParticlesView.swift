@@ -12,8 +12,9 @@ struct DirtParticlesView: View {
     var body: some View {
         Canvas { context, size in
             for dirtParticle in dirtParticles {
-                context.fill(dirtParticle.shape, with: .color(dirtParticle.color))
+                context.fill(dirtParticle.shape, with: .color(dirtParticle.color.toSwiftUIColor))
             }
         }
     }
 }
+
