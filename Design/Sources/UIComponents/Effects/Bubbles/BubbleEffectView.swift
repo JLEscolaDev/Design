@@ -27,6 +27,10 @@ public struct BubbleEffectView: View {
             .onChange(of: turnOnBubbles) {
                 addBubbles(geometrySize: size)
             }
+            .onChange(of: size) { oldSize, newSize in
+                viewModel.viewBottom = newSize.height
+                addBubbles(geometrySize: newSize)
+            }
             .onAppear {
                 viewModel.viewBottom = size.height
                 addBubbles(geometrySize: size)
