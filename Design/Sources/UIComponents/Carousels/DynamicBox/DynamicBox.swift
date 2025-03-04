@@ -254,7 +254,7 @@ extension DynamicBox {
 
 extension View {
     func snapshot(size: CGSize) -> MultiplatformImage {
-        #if os(iOS)
+        #if os(iOS) || os(visionOS)
         let controller = UIHostingController(rootView: self.frame(width: size.width, height: size.height))
         let view = controller.view
 
@@ -308,7 +308,7 @@ extension View {
 //    }
 //}
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 import SwiftUI
 typealias HostingController = UIHostingController
 #else

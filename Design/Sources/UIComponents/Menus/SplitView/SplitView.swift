@@ -122,9 +122,10 @@ public struct SplitView<TopContent: View, BottomContent: View>: View {
                 if isWebViewPresented {
                     ZStack {
                         if selectedSide == .right {
-                            
+                            #if os(iOS)
                             WebView(url: URL(string: "https://github.com/JLEscolaDev/DoomKanban")!, isLoading: $isLoading)
                                 .edgesIgnoringSafeArea(.all)
+                            #endif
                         }
                         
                         if isLoading {

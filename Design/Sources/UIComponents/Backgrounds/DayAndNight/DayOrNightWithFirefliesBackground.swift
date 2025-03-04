@@ -25,13 +25,8 @@ public struct DayOrNightWithFirefliesBackground: View {
         }
         .onAppear {
             // Get screen dimensions differently for macOS vs iOS
-            #if os(macOS)
-            let screenWidth  = NSScreen.main?.frame.width  ?? 800
-            let screenHeight = NSScreen.main?.frame.height ?? 600
-            #else
-            let screenWidth  = UIScreen.main.bounds.width
-            let screenHeight = UIScreen.main.bounds.height
-            #endif
+            let screenWidth  = MultiplatformScreen.bounds.width
+            let screenHeight = MultiplatformScreen.bounds.height
             
             fireflies = generateFireflies(
                 count: 10,

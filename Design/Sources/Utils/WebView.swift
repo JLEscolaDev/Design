@@ -20,7 +20,7 @@ class WebViewPreloader {
     }
 }
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 struct WebView: UIViewRepresentable {
     let url: URL
     @Binding var isLoading: Bool
