@@ -9,6 +9,10 @@
 import SwiftUI
 
 public struct InfoCard: View, Identifiable {
+    public init(vm: InfoCardViewModel) {
+        self.vm = vm
+    }
+    
     public enum InfoCardStyle {
         case `default`
         case style2
