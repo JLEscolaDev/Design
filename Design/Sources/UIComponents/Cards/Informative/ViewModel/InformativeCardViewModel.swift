@@ -8,16 +8,16 @@
 import SwiftUI
 
 @Observable
-class InformativeCardViewModel {
+public class InformativeCardViewModel {
     let text: String
     let type: InformationType
     
-    init(text: String, type: InformationType) {
+    public init(text: String, type: InformationType) {
         self.text = text
         self.type = type
     }
     
-    var colorBasedOnType: Color {
+    public var colorBasedOnType: Color {
         switch type {
         case .BASE:
             return Color.white
@@ -30,7 +30,7 @@ class InformativeCardViewModel {
         }
     }
     
-    var textColorBasedOnType: Color {
+    public var textColorBasedOnType: Color {
         switch type {
         case .BASE, .WARNING:
             return Color.black
@@ -39,7 +39,7 @@ class InformativeCardViewModel {
         }
     }
     
-    var iconBasedOnType: String {
+    public var iconBasedOnType: String {
         switch type {
         case .BASE:
             return "info.circle"

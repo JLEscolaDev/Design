@@ -1,7 +1,16 @@
 import SwiftUI
 
-public struct InformativeCard: View {
+public struct InformativeCard: View, Identifiable, Equatable {
+    public static func == (lhs: InformativeCard, rhs: InformativeCard) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    public var id = UUID()
     @State var vm: InformativeCardViewModel
+    
+    public init(vm: InformativeCardViewModel) {
+        _vm = .init(initialValue: vm)
+    }
     
     public var body: some View {
         HStack {

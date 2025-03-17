@@ -521,6 +521,14 @@ struct Carousles: View {
                         Text("Left aligned carousel (Step by Step)").sectionTitleStyle()
                     }
                     
+                    Section {
+                        StackedCardsView<InformativeCard>.preview
+                            .frame(width: geometry.size.width, height: 400)
+                            .padding(.horizontal, 30)
+                    } header: {
+                        Text("Stacked cards that can be dragged vertically").sectionTitleStyle()
+                    }
+                    
                     // Link para mostrar CardsrouselView en una nueva pantalla
                     NavigationLink(destination: CardsrouselPreview()) {
                         Text("Show draggable cards")
