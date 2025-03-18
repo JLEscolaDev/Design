@@ -24,7 +24,7 @@ public struct StackedCardsView<Content: View>: View where Content: Identifiable 
             ForEach(Array(contentList.enumerated()), id: \.element.id) { index, card in
                 card
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .offset(y: index == 0 ? dragOffset.height : CGFloat(index) * geometry.size.height*0.02) // Solo la primera carta se mueve
+                    .offset(y: index == 0 ? dragOffset.height : CGFloat(index) * 20) // Solo la primera carta se mueve
                     .scaleEffect(1 - (CGFloat(index) * 0.05)) // Profundidad
 //                    .opacity(1 - (CGFloat(index) * 0.1)) // Opacidad decreciente
                     .zIndex(Double(contentList.count - index))
