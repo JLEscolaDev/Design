@@ -20,7 +20,7 @@ struct DynamicBox: View {
     @State private var selectedCard: Int = -1
     @State private var openCard: Bool = false
     @State private var dragOffset: CGFloat = 0
-    let cards: [MultiplatformImage]
+    let cards: [DesignMultiplatformImage]
     let detailData: [InfoCard]
     
     init(cards: [InfoCard]) {
@@ -133,7 +133,7 @@ struct DynamicBox: View {
             let newHeight = isCardSelected && selectedCard != 0 ? height*1.1 : height
             let topPadding:CGFloat = isCardSelected && selectedCard == 0 ? 15 : 0
            
-            cards[cardIndex].toImage
+            cards[cardIndex].toUIImage
                 .resizable()
                 .frame(width: isCardSelected ? width+abs(dragOffset) : width, height: isCardSelected ?  newHeight+abs(dragOffset*1.5) : newHeight)
                 .drawingGroup()
@@ -253,7 +253,7 @@ extension DynamicBox {
 }
 
 extension View {
-    func snapshot(size: CGSize) -> MultiplatformImage {
+    func snapshot(size: CGSize) -> DesignMultiplatformImage {
         #if os(iOS) || os(visionOS)
         let controller = UIHostingController(rootView: self.frame(width: size.width, height: size.height))
         let view = controller.view

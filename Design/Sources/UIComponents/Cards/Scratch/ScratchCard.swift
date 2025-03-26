@@ -87,12 +87,12 @@ public struct ScratchCard: View {
 // MARK: - iOS Version
 public struct ScratchCard: View {
     // Use UIImage on iOS
-    public init(isWinner: Bool, scratchImages: [MultiplatformImage] = []) {
+    public init(isWinner: Bool, scratchImages: [DesignMultiplatformImage] = []) {
         self.isWinner = isWinner
         // Default images: Replace with your own UIImage init if needed
         self.scratchImages = scratchImages.isEmpty ? [
-            MultiplatformImage(resource: .scratch),
-            MultiplatformImage(resource: .luckyScratch) ?? UIImage()
+            DesignMultiplatformImage(resource: .scratch),
+            DesignMultiplatformImage(resource: .luckyScratch) ?? UIImage()
         ] : scratchImages
     }
     

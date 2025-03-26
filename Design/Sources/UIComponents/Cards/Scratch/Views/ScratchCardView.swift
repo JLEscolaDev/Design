@@ -19,7 +19,7 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
     init(
         cursorSize: CGFloat,
         onFinish: Binding<Bool>,
-        overlayImage: MultiplatformImage?,
+        overlayImage: DesignMultiplatformImage?,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder overlayView: @escaping () -> OverlayView
     ) {
@@ -38,7 +38,7 @@ struct ScratchCardView<Content: View, OverlayView: View>: View {
     @Binding private var onFinish: Bool
     
     @State private var overlayImageFrame: CGRect = .zero
-    @State private var overlayImage: MultiplatformImage?
+    @State private var overlayImage: DesignMultiplatformImage?
     @State private var allowGeneratingMoreParticles = true
     
     var body: some View {

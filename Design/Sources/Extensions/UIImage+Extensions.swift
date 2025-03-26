@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension MultiplatformImage {
+extension DesignMultiplatformImage {
     /// Returns the color (NSColor or UIColor) of the pixel at a given point.
     func getPixelColor(at point: CGPoint) -> MultiplatformColor? {
         #if os(macOS)

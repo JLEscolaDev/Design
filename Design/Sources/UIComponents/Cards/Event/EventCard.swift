@@ -35,7 +35,7 @@ public struct EventCard: View {
                             .resizable()
                             .scaledToFill()
                     case .success(let image):
-                        image.toImage // ✅ Now it works on both iOS and macOS
+                        image.toUIImage // ✅ Now it works on both iOS and macOS
                             .resizable()
                             .scaledToFill()
                 }

@@ -9,14 +9,14 @@ import SwiftUI
 
 #if os(macOS)
 import AppKit
-public typealias MultiplatformImage = NSImage
+public typealias DesignMultiplatformImage = NSImage
 #else
 import UIKit
-public typealias MultiplatformImage = UIImage
+public typealias DesignMultiplatformImage = UIImage
 #endif
 
-extension MultiplatformImage {
-    public var toImage: Image {
+extension DesignMultiplatformImage {
+    public var toUIImage: Image {
         #if os(macOS)
             Image(nsImage: self)
         #else
